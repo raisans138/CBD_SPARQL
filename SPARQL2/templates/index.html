@@ -1,0 +1,18 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Inicio</title>
+</head>
+<body>
+<h2>Usted ha buscado películas de Disney del actor: {{ actor }} </h2>
+{% for r in resultados %}
+    <a href="{{  r  }}">{{  r  }}</a>
+    <br>
+{% endfor %}
+
+<br>
+<br>
+
+</body>
+</html>
