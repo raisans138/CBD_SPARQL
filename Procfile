@@ -1,1 +1,1 @@
-web: gunicorn metronus.wsgi --log-file -
+web: gunicorn SPARQL2.wsgi --log-file -
