@@ -1,0 +1,76 @@
+{% extends 'layout.html' %}
+{% block title %}CBD - Web Semántica{% endblock %}
+
+{% block content %}
+
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <title>googleMapsExample</title>
+    <script src="http://maps.google.com/maps/api/js?sensor=false"
+          type="text/javascript"></script>
+</head>
+
+<body> <div id="map" style="width: 500px; height: 500px;horiz-align: center"></div>
+
+
+  <script type="text/javascript">
+       var defaultData = []
+
+       $.get({
+        url: "/ajaxMap",
+        success: function ( dataReceived )  {
+
+            var locations = [];
+
+            var coun, la, lo;
+            for(c in dataReceived.countries){
+
+
+                coun = dataReceived.countries[c];
+                la = dataReceived.lat[c];
+                lo = dataReceived.long[c];
+
+
+                locations[c]=[coun, la, lo];
+
+            }
+
+            var map = new google.maps.Map(document.getElementById('map'), {
+              zoom: 2,
+              center: new google.maps.LatLng(40.463667, -3.74922),
+              mapTypeId: google.maps.MapTypeId.ROADMAP
+            });
+
+            var infowindow = new google.maps.InfoWindow();
+
+            var marker, i;
+
+            for (i = 0; i < locations.length; i++) {
+              marker = new google.maps.Marker({
+                position: new google.maps.LatLng(locations[i][1], locations[i][2]),
+                map: map
+              });
+
+              google.maps.event.addListener(marker, 'click', (function(marker, i) {
+                return function() {
+                  infowindow.setContent(locations[i][0]);
+                  infowindow.open(map, marker);
+                }
+              })(marker, i));
+            }
+
+
+        }
+      }).fail(function () {
+          console.log("pete");
+      });
+
+
+
+  </script>
+</body>
+</html>
+
+{% endblock %}

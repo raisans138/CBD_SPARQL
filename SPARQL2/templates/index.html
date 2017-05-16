@@ -1,18 +1,22 @@
-<!DOCTYPE html>
+{% extends 'layout.html' %}
+{% block title %}CBD - Web Semántica{% endblock %}
+
+{% block content %}
+
 <html lang="en">
+
 <head>
     <meta charset="UTF-8">
     <title>Inicio</title>
 </head>
 <body>
-<h2>Usted ha buscado películas de Disney del actor: {{ actor }} </h2>
-{% for r in resultados %}
-    <a href="{{  r  }}">{{  r  }}</a>
-    <br>
-{% endfor %}
+<h2>Holis  </h2>
+
 
 <br>
 <br>
 
 </body>
 </html>
+
+{% endblock %}
