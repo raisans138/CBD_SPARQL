@@ -3,7 +3,6 @@ from django.http import HttpResponseRedirect, HttpResponse
 from SPARQLWrapper import SPARQLWrapper, JSON
 
 import json
-import googlemaps
 from datetime import datetime
 import time
 
