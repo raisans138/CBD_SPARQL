@@ -1,5 +1,5 @@
 {% extends 'layout.html' %}
-{% block title %}Diarios deportivos{% endblock %}
+{% block title %}CBD - Web Semántica{% endblock %}
 
 {% block content %}
 
@@ -9,12 +9,84 @@
     <meta charset="UTF-8">
     <title>moviesExample</title>
 </head>
+
+<script>
+
+    var globalActor = "Johnny Depp";
+    var globalRelated = "Disney";
+    var globalResults = [];
+
+    function setActor(value){
+        console.log("Actor: " + value);
+        globalActor = value;
+    };
+
+    function setRelated(value){
+        console.log("Related: " + value);
+
+        globalRelated = value;
+    };
+
+    function callAjax() {
+
+         var defaultData = [];
+         $.get({
+             url: "/ajaxMovie",
+             data:{
+                actor:globalActor,
+                related:globalRelated
+             },
+             success: function (dataReceived) {
+                 console.log("Holis: " + dataReceived);
+                 globalResults = dataReceived;
+                 var tex = "";
+
+                     tex +=
+                    "<thead> " +
+                    "<tr>" +
+                    "<th> <strong> Movies </strong>  </th>" +
+                    "</tr> " +
+                    "</thead>" +
+                    " <tbody>";
+                        for(x in dataReceived){
+                         tex += " <tr>" + "<td> <a href=' " + dataReceived[x] + " '>" + dataReceived[x] + "</a>" + "</td>" + "</tr>";
+                        }
+                    tex +=
+                    "</tbody>" +
+                    "</table>";
+                    $('#mytable').html(tex).appendTo('#resulttable');
+
+             }
+         }).fail(function () {
+             console.log("pete");
+         });
+     }
+
+
+</script>
+
 <body>
-<h2>Usted ha buscado películas de Disney del actor: {{ actor }}  </h2>
-{% for r in resultados %}
-    <a href="{{  r  }}">{{  r  }}</a>
-    <br>
-{% endfor %}
+ <script>callAjax()</script>
+<div class="row">
+<div class="form-group col-sm-2">
+          <label for="actor-input">Actor:</label>
+          <input type="text" class="form-control" id="actor-input" onchange=setActor(value)>
+
+          <label for="related-input">Related to:</label>
+          <input type="text" class="form-control" id="related-input" onchange=setRelated(value)>
+
+          <button id="refresh-btn" onclick="callAjax()">Go!</button>
+      </div>
+  <div class="col-sm-8">
+   <div>
+       <table class="table" id="mytable">
+
+       </table>
+
+   </div>
+       </div>
+
+</div>
 
 <br>
 <br>

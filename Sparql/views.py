@@ -10,8 +10,14 @@ import time
 def index(request):
       return render(request, "index.html")
 
-def moviesExample(request):
-    actor = "Johnny Depp"
+def go_movies(request):
+    return render(request, "moviesExample.html")
+
+def ajax_movie(request):
+
+    actor = request.GET.get("actor")
+    related = request.GET.get("related")
+
     sparql = SPARQLWrapper("http://dbpedia.org/sparql")
     sparql.setQuery("""
             SELECT DISTINCT ?pelicula WHERE {
@@ -20,7 +26,7 @@ def moviesExample(request):
       ?pelicula rdfs:label ?titulo FILTER(lang(?titulo) = "es") .
       ?pelicula dbo:starring ?reparto .
       ?reparto rdfs:label ?actor FILTER (?actor = '""" + actor + """'@en)
-      ?pelicula dct:subject ?sub FILTER( regex(str(?sub), "Disney" ))
+      ?pelicula dct:subject ?sub FILTER( regex(str(?sub), '"""+related+"""' ))
 
     }""")
     sparql.setReturnFormat(JSON)
@@ -30,20 +36,23 @@ def moviesExample(request):
     for result in results["results"]["bindings"]:
         list.append(result['pelicula']['value'])
 
-    return render(request, "moviesExample.html", {"actor": actor, "resultados": list})
+    print list
+    return HttpResponse(json.dumps(list), content_type="application/json")
 
 def goMap(request):
     return render(request, "mapsExample.html")
 
 
 def ajax_map(request):
+    popu = request.GET.get("popu")
+    ciOrCoun = request.GET.get("ciOrCoun")
     sparql = SPARQLWrapper("http://dbpedia.org/sparql")
     sparql.setQuery("""
 
         SELECT distinct ?country, ?lat, ?long WHERE{ 
-         ?country a dbo:Country ; dbo:populationTotal ?population ; rdf:type ?tipo .
-         FILTER (regex (?tipo, "WikicatCountriesInEurope")).
-         FILTER (?population > 10000000).
+         ?country a dbo:"""+ciOrCoun+"""; dbo:populationTotal ?population ; rdf:type ?tipo .
+         #FILTER (regex (?tipo, "WikicatCountriesInEurope")).
+         FILTER (?population > """+popu+""").
          ?country geo:lat ?lat .
          ?country geo:long ?long .
     }""")

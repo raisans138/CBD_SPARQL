@@ -15,9 +15,10 @@ urlpatterns = patterns('',
     # url(r'^admin/doc/', include('django.contrib.admindocs.urls')),
     url(r'^$', views.index),
     url(r'^index.html/$', views.index, name='home'),
-    url(r'^moviesExample/$', views.moviesExample),
+    url(r'^moviesExample/$', views.go_movies),
     url(r'^mapsExample/$', views.goMap),
     url(r'^ajaxMap$', views.ajax_map),
+    url(r'^ajaxMovie$', views.ajax_movie),
 
                        # Uncomment the next line to enable the admin:
     # url(r'^admin/', include(admin.site.urls)),
