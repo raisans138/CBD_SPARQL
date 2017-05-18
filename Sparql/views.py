@@ -70,5 +70,82 @@ def ajax_map(request):
     return HttpResponse(json.dumps(data), content_type="application/json")
 
 
+def goArtists(request):
+    return render(request, "artistsExample.html")
+
+
+def ajax_artists(request):
+
+    artist = request.GET.get("artist")
+    sparql = SPARQLWrapper("http://dbpedia.org/sparql")
+    sparql.setQuery("""
+        SELECT distinct ?album, ?name WHERE {
+        
+         ?album a dbo:Album ; dbo:releaseDate ?releaseDate ; foaf:name ?name; dbo:artist ?artist FILTER( regex(str(?artist), '"""+artist+"""' ))
+         OPTIONAL { ?artist dbo:bandMember ?miembros }
+         OPTIONAL { ?artist dbo:genre ?gen}
+         ?album dbo:abstract ?abs  filter(langMatches(lang(?abs),'en'))
+        } ORDER BY ?releaseDate
+        """)
+
+    sparql.setReturnFormat(JSON)
+    results = sparql.query().convert()
+    data = {'album':[], 'name':[]}
+
+    for result in results["results"]["bindings"]:
+        print result['name']['value']
+        data['album'].append(result['album']['value'])
+        data['name'].append(result['name']['value'])
+
+    return HttpResponse(json.dumps(data), content_type="application/json")
+
+
+def ajax_album(request):
+    album = request.GET.get("album")
+    artist = request.GET.get("artist")
+
+    sparql = SPARQLWrapper("http://dbpedia.org/sparql")
+    sparql.setQuery("""
+            SELECT distinct ?album, ?name, ?genre, ?releaseDate, ?abstract, ?artist WHERE {
+
+             ?album a dbo:Album ; dbo:releaseDate ?releaseDate ; foaf:name ?name ; dbo:abstract ?abstract;dbo:artist ?artist FILTER( regex(str(?artist), '"""+artist+"""' )) 
+             FILTER (regex(str(?name), '"""+album+"""')) filter(langMatches(lang(?abstract),'en'))
+             OPTIONAL { ?album dbo:genre ?genre}
+             OPTIONAL { ?album dbo:producer ?producer}
+             OPTIONAL { ?artist dbo:bandMember ?miembros }
+             OPTIONAL { ?artist dbo:genre ?gen}
+            }
+            """)
+    sparql.setReturnFormat(JSON)
+    results = sparql.query().convert()
+    data = {'album':[], 'genre':[], 'name':[], 'releaseDate':[], 'abstract':[], 'artist':[]}
+
+    a = ""
+    g = ""
+    n = ""
+    r = ""
+    ab = ""
+    ar = ""
+
+    for result in results["results"]["bindings"]:
+        a = result['album']['value']
+        g = result['genre']['value']
+        n = result['name']['value']
+        r = result['releaseDate']['value']
+        ab = result['abstract']['value']
+        ar = result['artist']['value']
+
+    data['album'].append(a)
+    data['genre'].append(g)
+    data['name'].append(n)
+    data['releaseDate'].append(r)
+    data['abstract'].append(ab)
+    data['artist'].append(ar)
+
+
+
+    return HttpResponse(json.dumps(data), content_type="application/json")
+
+
 
 
