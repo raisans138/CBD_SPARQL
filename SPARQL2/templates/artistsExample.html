@@ -6,6 +6,9 @@
 <html lang="en">
 
 <head>
+      <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">
+  <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
+  <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
     <meta charset="UTF-8">
     <title>artistExample</title>
 </head>
@@ -21,7 +24,7 @@
     };
 
 
-    function callAjax() {
+    function callAjax(index) {
 
          var defaultData = [];
          $.get({
@@ -48,6 +51,9 @@
                     "</tbody>" +
                     "</table>";
                     $('#mytable').html(tex).appendTo('#resulttable');
+                    document.getElementById("artist-table").style.display ="none";
+                    document.getElementById("genre-table").style.display ="none";
+
 
              }
          }).fail(function () {
@@ -69,28 +75,16 @@
                  globalResults = dataReceived;
                  var tex = "";
 
-                    /* tex +=
-                    "<thead> " +
-                    "<tr>" +
-                    "<th> <strong> Resources </strong>  </th>" +
-                    "</tr> " +
-                    "</thead>" +
-                    " <tbody>";
-                        /*for(x in dataReceived){
-                         tex += " <tr>" + "<td> <a href=' " + dataReceived[x] + " '>" + dataReceived[x] + "</a>" + "</td>" + "</tr>";
-                        }*/
+                 $('#mytable').html(tex).appendTo('#resulttable');
+                 document.getElementById("value-title").innerHTML = dataReceived.name[0];
+                 document.getElementById("value-genre").innerHTML = dataReceived.genre[0];
+                 document.getElementById("value-releaseDate").innerHTML = dataReceived.releaseDate[0];
+                 document.getElementById("value-abstract").innerHTML = dataReceived.abstract[0];
+                 document.getElementById("value-artist").innerHTML = dataReceived.artist[0];
 
-                    /*tex +=
-                    "</tbody>" +
-                    "</table>";*/
-                    tex = "";
-                    $('#mytable').html(tex).appendTo('#resulttable');
+                 document.getElementById("artist-table").style.display ="block";
+                 document.getElementById("genre-table").style.display ="none";
 
-                    document.getElementById("value-title").innerHTML = dataReceived.name[0];
-                    document.getElementById("value-genre").innerHTML = dataReceived.genre[0];
-                    document.getElementById("value-releaseDate").innerHTML = dataReceived.releaseDate[0];
-                    document.getElementById("value-abstract").innerHTML = dataReceived.abstract[0];
-                    document.getElementById("value-artist").innerHTML = dataReceived.artist[0];
 
              }
          }).fail(function () {
@@ -98,6 +92,99 @@
          });
      }
 
+     function callAjax3() {
+
+        document.getElementById("artist-table").display = 'none';
+
+         var globalGenre = document.getElementById("value-genre").innerHTML;
+         console.log(globalGenre);
+         var defaultData = [];
+         $.get({
+             url: "/ajaxGenre",
+             data:{
+                genre:globalGenre
+             },
+             success: function (dataReceived) {
+                 globalResults = dataReceived;
+                 var i = 0;
+                 var tex = "";
+
+                     tex +=
+                    "<thead> " +
+                    "<tr>" +
+                    "<th> <strong> Groups </strong>  </th>" +
+                    "</tr> " +
+                    "</thead>" +
+                    " <tbody>";
+                        for(i = 0; i < dataReceived.groups.length; i++){
+                         tex += " <tr> <td> <a href=' " + dataReceived.groups[i] + " '>" + dataReceived.gname[i] + "</a> </td> <td> <button class='btn' onclick='callAjax4("+i+")'>Details</button> </td> </tr>";
+                        }
+                    tex +=
+                    "</tbody>" +
+                    "</table>";
+                    $('#mytable').html(tex).appendTo('#resulttable');
+
+                    document.getElementById("value-genre-name").innerHTML = dataReceived.name[0];
+
+                    document.getElementById("value-derivatives").innerHTML = "";
+                    document.getElementById("value-instruments").innerHTML = "";
+                    document.getElementById("value-genre-abstract").innerHTML = dataReceived.abstract[0];
+
+
+                    for(i = 0; i < dataReceived.derivatives.length; i++){
+                        document.getElementById("value-derivatives").innerHTML += dataReceived.derivatives[i] + "<br>";
+                    }
+                    for(i = 0; i < dataReceived.instruments.length; i++){
+                        document.getElementById("value-instruments").innerHTML += dataReceived.instruments[i] + "<br>";
+                    }
+                    document.getElementById("artist-table").style.display ="none";
+                    document.getElementById("genre-table").style.display ="block";
+
+
+             }
+         }).fail(function () {
+             console.log("pete");
+         });
+     }
+
+      function callAjax4(index) {
+
+          globalArtist = globalResults.gname[index];
+
+         var defaultData = [];
+         $.get({
+             url: "/ajaxArtists",
+             data:{
+                artist:globalArtist
+             },
+             success: function (dataReceived) {
+                 globalResults = dataReceived;
+                 var i = 0;
+                 var tex = "";
+
+                     tex +=
+                    "<thead> " +
+                    "<tr>" +
+                    "<th> <strong> Albums </strong>  </th>" +
+                    "</tr> " +
+                    "</thead>" +
+                    " <tbody>";
+                        for(i = 0; i < dataReceived.album.length; i++){
+                         tex += " <tr> <td> <a href=' " + dataReceived.album[i] + " '>" + dataReceived.name[i] + "</a> </td> <td> <button class='btn' onclick='callAjax2(" + i + ")'>Details</button> </td> </tr>";
+                        }
+                    tex +=
+                    "</tbody>" +
+                    "</table>";
+                    $('#mytable').html(tex).appendTo('#resulttable');
+                    document.getElementById("artist-table").style.display ="none";
+                    document.getElementById("genre-table").style.display ="none";
+
+
+             }
+         }).fail(function () {
+             console.log("pete");
+         });
+     }
 
 </script>
 
@@ -119,10 +206,10 @@
    </div>
        </div>
 
-    <tr>
-    <tr>
-    <div class="row">
-        <table class="table">
+    <br>
+    <br>
+    <div class="row" id="artist-table">
+        <table class="table" >
             <thead>
                 <tr>
                     <th>
@@ -143,6 +230,7 @@
                         Genre
                     </th>
                     <th id="value-genre"></th>
+                    <th><button class="btn" onclick="callAjax3()">More</button> </th>
                 </tr>
                 <tr>
                     <th>
@@ -162,8 +250,38 @@
 
 </div>
 
-<br>
-<br>
+    <br>
+    <div class="row collapse" id="genre-table">
+        <table class="table" >
+            <thead>
+                <tr>
+                    <th>
+                        <strong>Genre Name</strong>
+                    </th>
+                    <th id="value-genre-name"></th>
+                </tr>
+                <tr>
+                    <th>
+                        <strong>Derivatives</strong>
+                    </th>
+                    <th id="value-derivatives"></th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr>
+                    <th>Instruments</th>
+                    <th id="value-instruments"></th>
+                </tr>
+                <tr>
+                    <th>Abstract</th>
+                    <th id="value-genre-abstract"> </th>
+                </tr>
+
+            </tbody>
+        </table>
+    </div>
+
+</div>
 
 </body>
 </html>

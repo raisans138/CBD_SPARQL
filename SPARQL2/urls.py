@@ -23,6 +23,7 @@ urlpatterns = patterns('',
     url(r'^ajaxMovie$', views.ajax_movie),
     url(r'^ajaxArtists$', views.ajax_artists),
     url(r'^ajaxAlbum$', views.ajax_album),
+    url(r'^ajaxGenre$', views.ajax_genre),
 
                        # Uncomment the next line to enable the admin:
     # url(r'^admin/', include(admin.site.urls)),

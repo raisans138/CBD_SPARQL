@@ -93,7 +93,6 @@ def ajax_artists(request):
     data = {'album':[], 'name':[]}
 
     for result in results["results"]["bindings"]:
-        print result['name']['value']
         data['album'].append(result['album']['value'])
         data['name'].append(result['name']['value'])
 
@@ -142,10 +141,52 @@ def ajax_album(request):
     data['abstract'].append(ab)
     data['artist'].append(ar)
 
+    return HttpResponse(json.dumps(data), content_type="application/json")
+
+
+def ajax_genre(request):
+    genre = request.GET.get("genre")
+    sparql = SPARQLWrapper("http://dbpedia.org/sparql")
+    sparql.setQuery("""
+       SELECT DISTINCT ?name, ?derivatives, ?instruments, ?abstract WHERE {
+
+        ?genre a dbo:MusicGenre ; dbo:abstract ?abstract FILTER( regex(str(?genre), '"""+genre+"""' )) filter(langMatches(lang(?abstract),'en'))
+        ?genre dbo:derivative ?derivatives .
+        ?genre foaf:name ?name .
+         ?genre dbo:instrument ?instruments
+         
+        } 
+        """)
+
+    sparql.setReturnFormat(JSON)
+    results = sparql.query().convert()
+    data = {'name': [], 'derivatives': [], 'instruments':[], 'abstract':[], 'groups':[], 'gname':[]}
+
+    for result in results["results"]["bindings"]:
+        data['name'].append(result['name']['value'])
+        if result['derivatives']['value'] not in data['derivatives']:
+            data['derivatives'].append(result['derivatives']['value'])
+        if result['instruments']['value'] not in data['instruments']:
+            data['instruments'].append(result['instruments']['value'])
+        data['abstract'].append(result['abstract']['value'])
+
+    sparql = SPARQLWrapper("http://dbpedia.org/sparql")
+    sparql.setQuery("""
+          SELECT DISTINCT ?grupo, ?name WHERE {
+
+         ?grupo a dbo:Group ; foaf:name ?name ; dbo:genre ?genre FILTER( regex(str(?genre), '"""+genre+"""' ))
+        } LIMIT 20
+            """)
+
+    sparql.setReturnFormat(JSON)
+    results = sparql.query().convert()
+    for result in results["results"]["bindings"]:
+        if result['grupo']['value'] not in data['groups']:
+            data['groups'].append(result['grupo']['value'])
+        data['gname'].append(result['name']['value'])
 
 
     return HttpResponse(json.dumps(data), content_type="application/json")
-
 
 
 
