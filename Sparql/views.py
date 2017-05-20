@@ -77,6 +77,17 @@ def goArtists(request):
 def ajax_artists(request):
 
     artist = request.GET.get("artist")
+
+    s = ""
+    re = ""
+    for x in artist:
+        s = x
+        if x == " ":
+            s = "_"
+        re += s
+
+    artist = re
+
     sparql = SPARQLWrapper("http://dbpedia.org/sparql")
     sparql.setQuery("""
         SELECT distinct ?album, ?name WHERE {
@@ -100,8 +111,23 @@ def ajax_artists(request):
 
 
 def ajax_album(request):
+
+
     album = request.GET.get("album")
     artist = request.GET.get("artist")
+
+    s = ""
+    re = ""
+    for x in artist:
+        s = x
+        if x == " ":
+            s = "_"
+        re += s
+
+    artist = re
+    print artist
+
+
 
     sparql = SPARQLWrapper("http://dbpedia.org/sparql")
     sparql.setQuery("""
@@ -146,6 +172,17 @@ def ajax_album(request):
 
 def ajax_genre(request):
     genre = request.GET.get("genre")
+
+    s = ""
+    re = ""
+    for x in genre:
+        s = x
+        if x == " ":
+            s = "_"
+        re += s
+
+    genre = re
+
     sparql = SPARQLWrapper("http://dbpedia.org/sparql")
     sparql.setQuery("""
        SELECT DISTINCT ?name, ?derivatives, ?instruments, ?abstract WHERE {

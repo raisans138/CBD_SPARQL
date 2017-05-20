@@ -7,7 +7,7 @@
 
 <head>
     <meta charset="UTF-8">
-    <title>moviesExample</title>
+    <title>ejemploPeliculas</title>
 </head>
 
 <script>
@@ -29,6 +29,11 @@
 
     function callAjax() {
 
+        if (globalActor == ""){
+            glovalActor = "Johnny Depp";
+        }
+
+
          var defaultData = [];
          $.get({
              url: "/ajaxMovie",
@@ -44,7 +49,7 @@
                      tex +=
                     "<thead> " +
                     "<tr>" +
-                    "<th> <strong> Movies </strong>  </th>" +
+                    "<th> <strong> Películas </strong>  </th>" +
                     "</tr> " +
                     "</thead>" +
                     " <tbody>";
@@ -72,10 +77,10 @@
           <label for="actor-input">Actor:</label>
           <input type="text" class="form-control" id="actor-input" onchange=setActor(value)>
 
-          <label for="related-input">Related to:</label>
+          <label for="related-input">Relacionado con:</label>
           <input type="text" class="form-control" id="related-input" onchange=setRelated(value)>
-
-          <button id="refresh-btn" onclick="callAjax()">Go!</button>
+            <br>
+          <button class="btn" id="refresh-btn" onclick="callAjax()">Buscar</button>
       </div>
   <div class="col-sm-8">
    <div>

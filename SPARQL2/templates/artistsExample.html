@@ -19,7 +19,7 @@
     var globalAlbum = "";
 
     function setArtist(value){
-        console.log("Artisdt: " + value);
+        console.log("Artist: " + value);
         globalArtist = value;
     };
 
@@ -40,12 +40,12 @@
                      tex +=
                     "<thead> " +
                     "<tr>" +
-                    "<th> <strong> Albums </strong>  </th>" +
+                    "<th> <strong> Albumes </strong>  </th>" +
                     "</tr> " +
                     "</thead>" +
                     " <tbody>";
                         for(i = 0; i < dataReceived.album.length; i++){
-                         tex += " <tr> <td> <a href=' " + dataReceived.album[i] + " '>" + dataReceived.name[i] + "</a> </td> <td> <button class='btn' onclick='callAjax2(" + i + ")'>Details</button> </td> </tr>";
+                         tex += " <tr> <td> <a href=' " + dataReceived.album[i] + " '>" + dataReceived.name[i] + "</a> </td> <td> <button class='btn' onclick='callAjax2(" + i + ")'>Detalles</button> </td> </tr>";
                         }
                     tex +=
                     "</tbody>" +
@@ -112,12 +112,12 @@
                      tex +=
                     "<thead> " +
                     "<tr>" +
-                    "<th> <strong> Groups </strong>  </th>" +
+                    "<th> <strong> Grupos </strong>  </th>" +
                     "</tr> " +
                     "</thead>" +
                     " <tbody>";
                         for(i = 0; i < dataReceived.groups.length; i++){
-                         tex += " <tr> <td> <a href=' " + dataReceived.groups[i] + " '>" + dataReceived.gname[i] + "</a> </td> <td> <button class='btn' onclick='callAjax4("+i+")'>Details</button> </td> </tr>";
+                         tex += " <tr> <td> <a href=' " + dataReceived.groups[i] + " '>" + dataReceived.gname[i] + "</a> </td> <td> <button class='btn' onclick='callAjax4("+i+")'>Detalles</button> </td> </tr>";
                         }
                     tex +=
                     "</tbody>" +
@@ -165,12 +165,12 @@
                      tex +=
                     "<thead> " +
                     "<tr>" +
-                    "<th> <strong> Albums </strong>  </th>" +
+                    "<th> <strong> Albumes </strong>  </th>" +
                     "</tr> " +
                     "</thead>" +
                     " <tbody>";
                         for(i = 0; i < dataReceived.album.length; i++){
-                         tex += " <tr> <td> <a href=' " + dataReceived.album[i] + " '>" + dataReceived.name[i] + "</a> </td> <td> <button class='btn' onclick='callAjax2(" + i + ")'>Details</button> </td> </tr>";
+                         tex += " <tr> <td> <a href=' " + dataReceived.album[i] + " '>" + dataReceived.name[i] + "</a> </td> <td> <button class='btn' onclick='callAjax2(" + i + ")'>Detalles</button> </td> </tr>";
                         }
                     tex +=
                     "</tbody>" +
@@ -190,12 +190,17 @@
 
 <body>
  <script>callAjax()</script>
+ <div>
+     <strong>Nota</strong>: Algunos recursos pueden no estar incluídos en dbpedia.org, y por lo tanto no serán mostrados en este sitio web.
+ </div>
+ <br>
+ <br>
 <div class="row">
 <div class="form-group col-sm-2">
-          <label for="actor-input">Artist:</label>
+          <label for="actor-input">Artista:</label>
           <input type="text" class="form-control" id="actor-input" onchange=setArtist(value)>
-
-          <button class="btn" id="refresh-btn" onclick="callAjax()">Go!</button>
+            <br>
+          <button class="btn" id="refresh-btn" onclick="callAjax()">Buscar</button>
       </div>
   <div class="col-sm-8">
    <div>
@@ -213,13 +218,13 @@
             <thead>
                 <tr>
                     <th>
-                        <strong>Artist</strong>
+                        <strong>Artista</strong>
                     </th>
                     <th id="value-artist"></th>
                 </tr>
                 <tr>
                     <th>
-                        <strong>Title</strong>
+                        <strong>Título</strong>
                     </th>
                     <th id="value-title"></th>
                 </tr>
@@ -227,20 +232,20 @@
             <tbody>
                 <tr>
                     <th>
-                        Genre
+                        Género
                     </th>
                     <th id="value-genre"></th>
-                    <th><button class="btn" onclick="callAjax3()">More</button> </th>
+                    <th><button class="btn" onclick="callAjax3()">Más</button> </th>
                 </tr>
                 <tr>
                     <th>
-                        Release Date
+                        Fecha lanzamiento
                     </th>
                     <th id="value-releaseDate"> </th>
                 </tr>
                 <tr>
                     <th>
-                        Abstract
+                        Resumen
                     </th>
                     <th id="value-abstract"> </th>
                 </tr>
@@ -256,24 +261,24 @@
             <thead>
                 <tr>
                     <th>
-                        <strong>Genre Name</strong>
+                        <strong>Nombre del género musical</strong>
                     </th>
                     <th id="value-genre-name"></th>
                 </tr>
                 <tr>
                     <th>
-                        <strong>Derivatives</strong>
+                        <strong>Derivados</strong>
                     </th>
                     <th id="value-derivatives"></th>
                 </tr>
             </thead>
             <tbody>
                 <tr>
-                    <th>Instruments</th>
+                    <th>Instrumentos</th>
                     <th id="value-instruments"></th>
                 </tr>
                 <tr>
-                    <th>Abstract</th>
+                    <th>Resumen</th>
                     <th id="value-genre-abstract"> </th>
                 </tr>
 
